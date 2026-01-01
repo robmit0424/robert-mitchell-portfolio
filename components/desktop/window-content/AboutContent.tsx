@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { personal } from "@/data/personal";
 import { HUDCorners } from "@/components/ui/HUDCorners";
+import { useContactModal } from "@/contexts/ContactModalContext";
 
 // Holographic profile frame with glitch effects
 function HologramFrame({ children }: { children: React.ReactNode }) {
@@ -60,6 +61,8 @@ function HologramFrame({ children }: { children: React.ReactNode }) {
 }
 
 export function AboutContent() {
+  const { openModal } = useContactModal();
+
   return (
     <div className="h-full overflow-auto p-6">
       <div className="max-w-4xl mx-auto">
@@ -112,8 +115,8 @@ export function AboutContent() {
                   ./view_profile
                 </span>
               </a>
-              <a
-                href={`mailto:${personal.email}`}
+              <button
+                onClick={openModal}
                 className="group relative px-5 py-2 bg-gradient-to-r from-stellar-pink/20 to-nebula-purple/20 border border-stellar-pink/50 hover:border-stellar-pink hover:from-stellar-pink/30 hover:to-nebula-purple/30 transition-all overflow-hidden rounded"
               >
                 <motion.div
@@ -129,7 +132,7 @@ export function AboutContent() {
                   />
                   ./transmit_msg
                 </span>
-              </a>
+              </button>
             </div>
           </div>
 

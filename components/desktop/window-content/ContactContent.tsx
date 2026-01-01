@@ -29,9 +29,9 @@ const contactLinks = [
     ),
   },
   {
-    label: "GITHUB_REPO",
+    label: "SOURCE_CODE",
     href: personal.github,
-    value: "View Source",
+    value: "View Repo",
     channel: "GIT",
     icon: (
       <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">

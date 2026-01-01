@@ -4,7 +4,7 @@ export const personal = {
   location: "Charleston, SC",
   email: "robertmitchell.biz@gmail.com",
   linkedin: "https://www.linkedin.com/in/robert-mitchell-193aaa277/",
-  github: "https://github.com/robert-mitchell",
+  github: "https://github.com/robmit0424/robert-mitchell-portfolio",
   summary: "Senior Software Engineer with 3+ years of experience building and scaling consumer and B2B web applications. Specialized in React, React Native, and Next.js with a strong product mindset and a track record of shipping revenue-generating features used by 50,000+ monthly users.",
   highlights: [
     { label: "Years Experience", value: "3+" },
