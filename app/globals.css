@@ -303,6 +303,116 @@ h1, h2, h3, h4, h5, h6,
   animation: spotlight 2s ease 0.75s 1 forwards;
 }
 
+/* Weapon loadout animations */
+@keyframes weapon-glow-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 20px var(--glow-color, var(--aurora-cyan)))
+            drop-shadow(0 0 40px var(--glow-color, var(--aurora-cyan)));
+  }
+  50% {
+    filter: drop-shadow(0 0 30px var(--glow-color, var(--aurora-cyan)))
+            drop-shadow(0 0 60px var(--glow-color, var(--aurora-cyan)));
+  }
+}
+
+.weapon-glow {
+  animation: weapon-glow-pulse 2s ease-in-out infinite;
+}
+
+/* Hologram scan line effect */
+@keyframes hologram-scan {
+  0% {
+    top: -10%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    top: 110%;
+    opacity: 0;
+  }
+}
+
+.hologram-scan-line {
+  animation: hologram-scan 3s ease-in-out infinite;
+}
+
+/* Skill slot equip effect */
+@keyframes skill-equip {
+  0% {
+    transform: scale(0.8) translateY(20px);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05) translateY(-5px);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.skill-equip {
+  animation: skill-equip 0.4s ease-out forwards;
+}
+
+/* Selection indicator pulse */
+@keyframes selection-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 var(--aurora-cyan);
+  }
+  50% {
+    box-shadow: 0 0 0 8px transparent;
+  }
+}
+
+.selection-pulse {
+  animation: selection-pulse 1.5s ease-in-out infinite;
+}
+
+/* Scrollbar for weapon carousel */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(34, 211, 209, 0.2);
+  border-radius: 2px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(34, 211, 209, 0.4);
+}
+
+/* Hide scrollbar utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Stat bar fill animation */
+@keyframes stat-fill {
+  from {
+    width: 0;
+  }
+}
+
+.stat-bar-fill {
+  animation: stat-fill 0.8s ease-out forwards;
+}
+
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   *,
