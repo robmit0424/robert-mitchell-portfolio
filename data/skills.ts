@@ -32,7 +32,7 @@ export const skillCategories: SkillCategory[] = [
     tagline: 'Build blazing fast interfaces',
     stats: { versatility: 95, complexity: 75, power: 90 },
     skills: [
-      { id: 'react', name: 'React / React Native', icon: `${DEVICON_BASE}/react/react-original.svg`, color: '#61DAFB' },
+      { id: 'react', name: 'React', icon: `${DEVICON_BASE}/react/react-original.svg`, color: '#61DAFB' },
       { id: 'nextjs', name: 'Next.js', icon: `${DEVICON_BASE}/nextjs/nextjs-original.svg`, color: '#ffffff' },
       { id: 'typescript', name: 'TypeScript', icon: `${DEVICON_BASE}/typescript/typescript-original.svg`, color: '#3178C6' },
       { id: 'vue', name: 'Vue.js', icon: `${DEVICON_BASE}/vuejs/vuejs-original.svg`, color: '#4FC08D' },
@@ -146,6 +146,7 @@ export const skillCategories: SkillCategory[] = [
     tagline: 'Native experiences everywhere',
     stats: { versatility: 80, complexity: 75, power: 85 },
     skills: [
+      { id: 'react-native', name: 'React Native', icon: `${DEVICON_BASE}/react/react-original.svg`, color: '#61DAFB' },
       { id: 'expo', name: 'Expo', icon: `${SIMPLE_BASE}/expo/white`, color: '#06B6D4' },
       { id: 'swift', name: 'Swift / SwiftUI', icon: `${DEVICON_BASE}/swift/swift-original.svg`, color: '#FA7343' },
     ],

@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { HUDCorners } from "@/components/ui/HUDCorners";
+import { SkillSlot } from "./SkillSlot";
 import type { SkillCategory } from "@/data/skills";
 
 interface WeaponStatsProps {
@@ -52,14 +53,22 @@ function StatBar({ label, value, color, delay }: StatBarProps) {
 export function WeaponStats({ category }: WeaponStatsProps) {
   return (
     <div className="relative h-full">
-      <div className="relative bg-black/40 backdrop-blur-xl border border-aurora-cyan/20 rounded-lg p-4 h-full">
+      <div className="relative bg-black/40 backdrop-blur-xl border border-aurora-cyan/20 rounded-lg p-4 h-full flex flex-col">
         <HUDCorners size="sm" />
 
         {/* Header */}
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-2 h-2 rounded-full bg-aurora-cyan animate-pulse" />
-          <span className="text-xs font-mono text-aurora-cyan uppercase tracking-wider">
-            Weapon Analysis
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-hud-green animate-pulse" />
+            <span className="text-xs font-mono text-aurora-cyan uppercase tracking-wider">
+              Loadout
+            </span>
+          </div>
+          <span
+            className="text-xs font-mono font-bold"
+            style={{ color: category.color }}
+          >
+            {category.skills.length} EQUIPPED
           </span>
         </div>
 
@@ -70,10 +79,10 @@ export function WeaponStats({ category }: WeaponStatsProps) {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.3 }}
-            className="space-y-4"
+            className="flex-1 flex flex-col min-h-0"
           >
             {/* Stats bars */}
-            <div className="space-y-3">
+            <div className="space-y-2 mb-3">
               <StatBar
                 label="Versatility"
                 value={category.stats.versatility}
@@ -94,28 +103,37 @@ export function WeaponStats({ category }: WeaponStatsProps) {
               />
             </div>
 
-            {/* Divider */}
-            <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-
             {/* Tagline */}
-            <div className="text-center py-2">
+            <div className="text-center py-2 border-t border-b border-white/5">
               <p
-                className="text-sm font-mono italic"
+                className="text-xs font-mono italic"
                 style={{ color: category.color }}
               >
                 &ldquo;{category.tagline}&rdquo;
               </p>
             </div>
 
-            {/* Skill count */}
-            <div className="flex items-center justify-center gap-2 pt-2">
-              <div
-                className="w-1.5 h-1.5 rounded-full"
-                style={{ backgroundColor: category.color }}
-              />
-              <span className="text-[10px] font-mono text-text-muted">
-                {category.skills.length} SKILLS IN ARSENAL
-              </span>
+            {/* Skills grid - scrollable, with padding for hover effects */}
+            <div className="flex-1 overflow-y-auto overflow-x-hidden mt-3 min-h-0 px-1 py-2">
+              <div className="grid grid-cols-3 gap-2">
+                {category.skills.map((skill, index) => (
+                  <SkillSlot
+                    key={skill.id}
+                    skill={skill}
+                    categoryColor={category.color}
+                    index={index}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Status bar */}
+            <div className="mt-3 pt-2 border-t border-white/5">
+              <div className="flex items-center justify-center gap-3 text-[10px] font-mono text-text-muted/50">
+                <span>LOADOUT: ACTIVE</span>
+                <span className="text-aurora-cyan/30">|</span>
+                <span>READY: 100%</span>
+              </div>
             </div>
           </motion.div>
         </AnimatePresence>

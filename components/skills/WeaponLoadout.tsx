@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { WeaponCarousel } from "./WeaponCarousel";
 import { WeaponDisplay } from "./WeaponDisplay";
 import { WeaponStats } from "./WeaponStats";
-import { SkillsLoadoutPanel } from "./SkillsLoadoutPanel";
 import { HUDCorners } from "@/components/ui/HUDCorners";
 import { skillCategories } from "@/data/skills";
 
@@ -57,7 +56,7 @@ export function WeaponLoadout() {
   }, [isIdle]);
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-full overflow-hidden">
       {/* Grid overlay */}
       <div
         className="absolute inset-0 opacity-[0.02] pointer-events-none"
@@ -71,89 +70,116 @@ export function WeaponLoadout() {
       />
 
       {/* Main content */}
-      <div className="relative z-10 h-full flex flex-col">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center py-6"
-        >
-          <div className="inline-block relative">
-            <div className="absolute -inset-1 bg-gradient-to-r from-nebula-purple/30 to-aurora-cyan/30 blur" />
-            <div className="relative px-6 py-3 bg-black/60 backdrop-blur-sm border border-aurora-cyan/30">
-              <HUDCorners />
-              <h2 className="text-xl md:text-2xl font-bold tracking-wider text-aurora-cyan font-mono">
-                <span className="text-nebula-purple mr-2">&gt;</span>
-                ARMORY.exe
+      <div className="relative z-10 h-full flex flex-col px-8 md:px-20 lg:px-32 py-12">
+        {/* Main terminal window */}
+        <div className="flex-1 flex flex-col bg-black/50 backdrop-blur-sm border border-aurora-cyan/30 rounded-lg overflow-hidden">
+          <HUDCorners />
+
+          {/* Terminal header bar */}
+          <div className="flex items-center justify-between border-b border-aurora-cyan/30 px-4 py-2 bg-black/40 flex-shrink-0">
+            <div className="flex items-center gap-3">
+              <div className="flex gap-1.5">
+                <div className="w-2.5 h-2.5 rounded-full bg-hud-red/80" />
+                <div className="w-2.5 h-2.5 rounded-full bg-hud-amber/80" />
+                <div className="w-2.5 h-2.5 rounded-full bg-hud-green/80" />
+              </div>
+              <span className="font-mono text-sm text-aurora-cyan">
+                <span className="text-nebula-purple">&gt;</span> ARMORY.exe
                 <motion.span
                   animate={{ opacity: [1, 0] }}
                   transition={{ duration: 0.5, repeat: Infinity }}
-                  className="ml-1"
                 >
                   _
                 </motion.span>
-              </h2>
+              </span>
             </div>
-          </div>
-          <p className="mt-2 text-xs font-mono text-text-muted">
-            WEAPONS LOADOUT SYSTEM
-          </p>
-
-          {/* Auto-cycle indicator */}
-          {isIdle && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="mt-2 flex items-center justify-center gap-2"
-            >
-              <div className="w-1.5 h-1.5 rounded-full bg-aurora-cyan animate-pulse" />
-              <span className="text-[10px] font-mono text-aurora-cyan/60">AUTO-CYCLING</span>
-            </motion.div>
-          )}
-        </motion.div>
-
-        {/* Three-column layout */}
-        <div className="flex-1 px-4 md:px-8 pb-4 flex flex-col gap-4 min-h-0">
-          {/* Top section: Carousel | Display | Stats */}
-          <div className="flex-1 grid grid-cols-12 gap-4 min-h-0">
-            {/* Left: Weapon Carousel (20%) */}
-            <div className="col-span-3 min-h-0">
-              <WeaponCarousel
-                categories={skillCategories}
-                selectedIndex={selectedIndex}
-                onSelect={handleSelect}
-              />
-            </div>
-
-            {/* Center: Weapon Display (50%) */}
-            <div className="col-span-6 min-h-0">
-              <WeaponDisplay category={selectedCategory} />
-            </div>
-
-            {/* Right: Weapon Stats (30%) */}
-            <div className="col-span-3 min-h-0">
-              <WeaponStats category={selectedCategory} />
+            <div className="flex items-center gap-4 text-[10px] font-mono text-text-muted/50">
+              {isIdle && (
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-aurora-cyan animate-pulse" />
+                  <span className="text-aurora-cyan/60">AUTO-CYCLING</span>
+                </div>
+              )}
+              <span>weapons: {skillCategories.length}</span>
             </div>
           </div>
 
-          {/* Bottom: Skills Loadout Panel */}
-          <div className="flex-shrink-0">
-            <SkillsLoadoutPanel category={selectedCategory} />
+          {/* Three-column layout */}
+          <div className="flex-1 p-4 min-h-0 overflow-hidden">
+            <div className="h-full grid grid-cols-12 gap-4 overflow-hidden">
+              {/* Left: Weapon Carousel in sub-window */}
+              <div className="col-span-3 min-h-0 overflow-hidden">
+                <div className="h-full bg-black/40 border border-aurora-cyan/20 rounded overflow-hidden flex flex-col">
+                  <div className="px-3 py-1.5 border-b border-aurora-cyan/20 bg-black/40 flex-shrink-0">
+                    <span className="text-[10px] font-mono text-aurora-cyan/70">INVENTORY.dat</span>
+                  </div>
+                  <div className="flex-1 min-h-0 overflow-hidden">
+                    <WeaponCarousel
+                      categories={skillCategories}
+                      selectedIndex={selectedIndex}
+                      onSelect={handleSelect}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Center: Weapon Display in sub-window */}
+              <div className="col-span-5 min-h-0 overflow-hidden">
+                <div className="h-full bg-black/40 border border-aurora-cyan/20 rounded overflow-hidden flex flex-col">
+                  <div className="px-3 py-1.5 border-b border-aurora-cyan/20 bg-black/40 flex-shrink-0">
+                    <span className="text-[10px] font-mono text-aurora-cyan/70">WEAPON_VIEWER.exe</span>
+                  </div>
+                  <div className="flex-1 min-h-0 overflow-hidden">
+                    <WeaponDisplay category={selectedCategory} />
+                  </div>
+                </div>
+              </div>
+
+              {/* Right: Stats + Skills in sub-window */}
+              <div className="col-span-4 min-h-0 overflow-hidden">
+                <div className="h-full bg-black/40 border border-aurora-cyan/20 rounded overflow-hidden flex flex-col">
+                  <div className="px-3 py-1.5 border-b border-aurora-cyan/20 bg-black/40 flex-shrink-0">
+                    <span className="text-[10px] font-mono text-aurora-cyan/70">STATS.json</span>
+                  </div>
+                  <div className="flex-1 min-h-0 overflow-hidden">
+                    <WeaponStats category={selectedCategory} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Terminal footer */}
+          <div className="border-t border-aurora-cyan/20 px-4 py-2 bg-black/40 flex-shrink-0">
+            <div className="flex items-center justify-between text-[10px] font-mono text-text-muted/40">
+              <span>select weapon // view stats</span>
+              <span>loadout {selectedIndex + 1} of {skillCategories.length}</span>
+            </div>
           </div>
         </div>
 
         {/* Corner decorations */}
-        <div className="absolute top-24 left-8 text-xs font-mono text-text-muted/50 hidden lg:block">
-          <div className="flex items-center gap-2 mb-1">
-            <div className="w-2 h-2 bg-hud-green rounded-full" />
+        <div className="absolute top-4 left-4 text-[10px] font-mono text-text-muted/60 hidden lg:block z-20">
+          <div className="flex items-center gap-2 mb-0.5">
+            <div className="w-1.5 h-1.5 bg-hud-green rounded-full" />
             <span>SECTOR: 003</span>
           </div>
           <div className="text-aurora-cyan/50">NODE: ARMORY</div>
         </div>
 
-        <div className="absolute top-24 right-8 text-xs font-mono text-right text-text-muted/50 hidden lg:block">
-          <div className="text-aurora-cyan/50">WEAPONS: {skillCategories.length}</div>
-          <div>STATUS: ARMED</div>
+        <div className="absolute top-4 right-4 text-[10px] font-mono text-right text-text-muted/60 hidden lg:block z-20">
+          <div className="text-aurora-cyan/50">STATUS: ARMED</div>
+          <div>CLEARANCE: GRANTED</div>
+        </div>
+
+        <div className="absolute bottom-4 left-4 text-[10px] font-mono text-text-muted/40 hidden lg:block z-20">
+          <div>LOADOUT: ACTIVE</div>
+          <div>SLOTS: EQUIPPED</div>
+        </div>
+
+        <div className="absolute bottom-4 right-4 text-[10px] font-mono text-text-muted/40 hidden lg:block z-20">
+          <div className="text-right">ACCESS: FULL</div>
+          <div className="text-right">MODE: BROWSE</div>
         </div>
       </div>
     </div>

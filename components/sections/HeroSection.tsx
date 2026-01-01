@@ -6,22 +6,7 @@ import { NebulaBackground } from "@/components/ui/nebula-background";
 import { personal } from "@/data/personal";
 import { useLoading } from "@/contexts/LoadingContext";
 import { useContactModal } from "@/contexts/ContactModalContext";
-
-// HUD Corner brackets component
-function HUDCorners({ className = "" }: { className?: string }) {
-  return (
-    <div className={`absolute inset-0 pointer-events-none ${className}`}>
-      {/* Top-left */}
-      <div className="absolute top-0 left-0 w-6 h-6 border-l-2 border-t-2 border-aurora-cyan opacity-60" />
-      {/* Top-right */}
-      <div className="absolute top-0 right-0 w-6 h-6 border-r-2 border-t-2 border-aurora-cyan opacity-60" />
-      {/* Bottom-left */}
-      <div className="absolute bottom-0 left-0 w-6 h-6 border-l-2 border-b-2 border-aurora-cyan opacity-60" />
-      {/* Bottom-right */}
-      <div className="absolute bottom-0 right-0 w-6 h-6 border-r-2 border-b-2 border-aurora-cyan opacity-60" />
-    </div>
-  );
-}
+import { HUDCorners } from "@/components/ui/HUDCorners";
 
 // Typing effect component
 function TypeWriter({
@@ -213,7 +198,7 @@ export function HeroSection() {
     <section
       id="hero"
       ref={sectionRef}
-      className="group relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="group relative h-screen flex items-center justify-center overflow-hidden"
     >
       {/* Nebula background */}
       <NebulaBackground />
@@ -396,29 +381,26 @@ export function HeroSection() {
         <div className="w-4 h-4 border-b-2 border-r-2 border-aurora-cyan/60" />
       </motion.div>
 
-      {/* HUD decorative elements */}
-      {/* Top-left corner */}
-      <div className="absolute top-8 left-8 text-xs font-mono text-text-muted/50 hidden md:block">
-        <div className="flex items-center gap-2 mb-1">
-          <div className="w-2 h-2 bg-hud-green rounded-full" />
+      {/* HUD decorative elements - corners */}
+      <div className="absolute top-4 left-4 text-[10px] font-mono text-text-muted/60 hidden md:block z-20">
+        <div className="flex items-center gap-2 mb-0.5">
+          <div className="w-1.5 h-1.5 bg-hud-green rounded-full" />
           <span>SYS.OK</span>
         </div>
         <div className="text-aurora-cyan/50">v2.0.25</div>
       </div>
 
-      {/* Top-right corner */}
-      <div className="absolute top-8 right-8 text-xs font-mono text-right text-text-muted/50 hidden md:block">
+      <div className="absolute top-4 right-4 text-[10px] font-mono text-right text-text-muted/60 hidden md:block z-20">
         <div className="text-aurora-cyan/50">PORTFOLIO.exe</div>
         <div>READY</div>
       </div>
 
-      {/* Bottom corners */}
-      <div className="absolute bottom-8 left-8 text-xs font-mono text-text-muted/30 hidden md:block">
+      <div className="absolute bottom-4 left-4 text-[10px] font-mono text-text-muted/40 hidden md:block z-20">
         <div>LAT: 32.7765° N</div>
         <div>LON: 79.9311° W</div>
       </div>
 
-      <div className="absolute bottom-8 right-8 text-xs font-mono text-text-muted/30 hidden md:block">
+      <div className="absolute bottom-4 right-4 text-[10px] font-mono text-text-muted/40 hidden md:block z-20">
         <div className="text-right">FRAME: 60 FPS</div>
         <div className="text-right">RENDER: OPTIMAL</div>
       </div>

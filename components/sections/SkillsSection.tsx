@@ -9,8 +9,8 @@ export function SkillsSection() {
       {/* Desktop: Full loadout experience */}
       <section
         id="skills"
-        className="relative hidden md:block h-screen overflow-hidden"
-        style={{ backgroundColor: "#030014" }}
+        className="relative hidden md:block overflow-hidden"
+        style={{ backgroundColor: "#030014", height: "100vh" }}
       >
         <WeaponLoadout />
       </section>

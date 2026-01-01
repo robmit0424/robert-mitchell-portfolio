@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { HUDCorners } from "@/components/ui/HUDCorners";
@@ -128,6 +128,26 @@ function WeaponThumbnail({ category, isSelected, onClick, index }: WeaponThumbna
 }
 
 export function WeaponCarousel({ categories, selectedIndex, onSelect }: WeaponCarouselProps) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollUp, setCanScrollUp] = useState(false);
+  const [canScrollDown, setCanScrollDown] = useState(true);
+
+  // Check scroll position
+  const updateScrollIndicators = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanScrollUp(el.scrollTop > 10);
+    setCanScrollDown(el.scrollTop < el.scrollHeight - el.clientHeight - 10);
+  }, []);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    updateScrollIndicators();
+    el.addEventListener("scroll", updateScrollIndicators);
+    return () => el.removeEventListener("scroll", updateScrollIndicators);
+  }, [updateScrollIndicators]);
+
   // Keyboard navigation
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -149,7 +169,7 @@ export function WeaponCarousel({ categories, selectedIndex, onSelect }: WeaponCa
 
   return (
     <div className="relative h-full">
-      <div className="relative bg-black/40 backdrop-blur-xl border border-aurora-cyan/20 rounded-lg p-3 h-full">
+      <div className="relative bg-black/40 backdrop-blur-xl border border-aurora-cyan/20 rounded-lg p-3 h-full flex flex-col">
         <HUDCorners size="sm" />
 
         {/* Header */}
@@ -160,25 +180,64 @@ export function WeaponCarousel({ categories, selectedIndex, onSelect }: WeaponCa
           </span>
         </div>
 
-        {/* Scrollable weapon list */}
-        <div className="space-y-2 overflow-y-auto max-h-[calc(100%-60px)] pr-1 scrollbar-thin scrollbar-thumb-aurora-cyan/20 scrollbar-track-transparent">
-          {categories.map((category, index) => (
-            <WeaponThumbnail
-              key={category.id}
-              category={category}
-              isSelected={index === selectedIndex}
-              onClick={() => onSelect(index)}
-              index={index}
-            />
-          ))}
+        {/* Scroll container with indicators */}
+        <div className="relative flex-1 min-h-0">
+          {/* Top scroll indicator */}
+          {canScrollUp && (
+            <div className="absolute top-0 left-0 right-2 h-8 bg-gradient-to-b from-black/80 to-transparent z-10 pointer-events-none flex items-start justify-center pt-1">
+              <motion.span
+                animate={{ y: [0, -3, 0] }}
+                transition={{ duration: 1, repeat: Infinity }}
+                className="text-aurora-cyan text-xs"
+              >
+                ▲
+              </motion.span>
+            </div>
+          )}
+
+          {/* Scrollable weapon list */}
+          <div
+            ref={scrollRef}
+            className="space-y-2 overflow-y-auto h-full pr-1"
+            style={{
+              scrollbarWidth: "thin",
+              scrollbarColor: "rgba(34, 211, 209, 0.4) transparent",
+            }}
+          >
+            {categories.map((category, index) => (
+              <WeaponThumbnail
+                key={category.id}
+                category={category}
+                isSelected={index === selectedIndex}
+                onClick={() => onSelect(index)}
+                index={index}
+              />
+            ))}
+          </div>
+
+          {/* Bottom scroll indicator */}
+          {canScrollDown && (
+            <div className="absolute bottom-0 left-0 right-2 h-8 bg-gradient-to-t from-black/80 to-transparent z-10 pointer-events-none flex items-end justify-center pb-1">
+              <motion.span
+                animate={{ y: [0, 3, 0] }}
+                transition={{ duration: 1, repeat: Infinity }}
+                className="text-aurora-cyan text-xs"
+              >
+                ▼
+              </motion.span>
+            </div>
+          )}
         </div>
 
         {/* Footer with nav hints */}
-        <div className="absolute bottom-3 left-3 right-3 pt-2 border-t border-white/5">
-          <div className="flex items-center justify-center gap-3 text-[10px] font-mono text-text-muted/40">
-            <span>↑↓ Navigate</span>
-            <span className="text-aurora-cyan/30">|</span>
-            <span>Click Select</span>
+        <div className="pt-2 mt-2 border-t border-white/5">
+          <div className="flex items-center justify-center gap-2 text-[10px] font-mono text-aurora-cyan/60">
+            <motion.span
+              animate={{ opacity: [0.4, 1, 0.4] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              CLICK TO SELECT
+            </motion.span>
           </div>
         </div>
       </div>

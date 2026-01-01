@@ -12,43 +12,42 @@ interface SkillSlotProps {
 export function SkillSlot({ skill, categoryColor, index }: SkillSlotProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20, scale: 0.9 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{
         type: "spring",
         stiffness: 200,
         damping: 20,
-        delay: index * 0.05,
+        delay: index * 0.03,
       }}
       whileHover={{
-        y: -8,
-        scale: 1.05,
+        y: -4,
         transition: { duration: 0.2 },
       }}
-      className="group relative"
+      className="group"
     >
-      {/* Slot container */}
+      {/* Slot container - fixed uniform size */}
       <div
-        className="relative flex flex-col items-center p-3 rounded-lg bg-black/60 backdrop-blur-sm border border-white/10 hover:border-white/30 transition-all duration-300 cursor-pointer"
+        className="relative flex flex-col items-center justify-center w-full h-20 rounded-lg bg-black/80 border border-white/20 hover:border-aurora-cyan/50 transition-all duration-300 cursor-pointer"
         style={{
           boxShadow: `0 0 0 rgba(${hexToRgb(categoryColor)}, 0)`,
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.boxShadow = `0 0 20px rgba(${hexToRgb(categoryColor)}, 0.4)`;
+          e.currentTarget.style.boxShadow = `0 0 15px rgba(${hexToRgb(categoryColor)}, 0.5)`;
           e.currentTarget.style.borderColor = categoryColor;
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.boxShadow = `0 0 0 rgba(${hexToRgb(categoryColor)}, 0)`;
-          e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
+          e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
         }}
       >
         {/* Skill icon */}
-        <div className="w-10 h-10 mb-2 relative">
+        <div className="w-8 h-8 mb-1 relative flex-shrink-0">
           {skill.icon ? (
             <img
               src={skill.icon}
               alt={skill.name}
-              className={`w-full h-full object-contain transition-all duration-300 group-hover:scale-110 ${
+              className={`w-full h-full object-contain transition-all duration-300 ${
                 skill.invert ? "brightness-0 invert" : ""
               }`}
               style={{
@@ -57,7 +56,7 @@ export function SkillSlot({ skill, categoryColor, index }: SkillSlotProps) {
             />
           ) : (
             <div
-              className="w-full h-full flex items-center justify-center rounded-lg text-lg font-bold font-mono"
+              className="w-full h-full flex items-center justify-center rounded text-sm font-bold font-mono"
               style={{
                 background: `linear-gradient(135deg, ${categoryColor}40 0%, ${categoryColor}20 100%)`,
                 color: categoryColor,
@@ -68,19 +67,10 @@ export function SkillSlot({ skill, categoryColor, index }: SkillSlotProps) {
           )}
         </div>
 
-        {/* Skill name */}
-        <span className="text-[10px] font-mono text-text-muted text-center leading-tight max-w-[70px] group-hover:text-white transition-colors">
+        {/* Skill name - truncate if too long */}
+        <span className="text-[9px] font-mono text-text-muted text-center leading-tight px-1 truncate w-full group-hover:text-white transition-colors">
           {skill.name}
         </span>
-
-        {/* Equipped indicator dot */}
-        <div
-          className="absolute -top-1 -right-1 w-2 h-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-          style={{
-            backgroundColor: categoryColor,
-            boxShadow: `0 0 6px ${categoryColor}`,
-          }}
-        />
       </div>
     </motion.div>
   );

@@ -3,18 +3,8 @@
 import { motion } from "framer-motion";
 import { personal } from "@/data/personal";
 import { useContactModal } from "@/contexts/ContactModalContext";
-
-// HUD Corner brackets component
-function HUDCorners({ className = "" }: { className?: string }) {
-  return (
-    <div className={`absolute inset-0 pointer-events-none ${className}`}>
-      <div className="absolute top-0 left-0 w-6 h-6 border-l-2 border-t-2 border-aurora-cyan opacity-60" />
-      <div className="absolute top-0 right-0 w-6 h-6 border-r-2 border-t-2 border-aurora-cyan opacity-60" />
-      <div className="absolute bottom-0 left-0 w-6 h-6 border-l-2 border-b-2 border-aurora-cyan opacity-60" />
-      <div className="absolute bottom-0 right-0 w-6 h-6 border-r-2 border-b-2 border-aurora-cyan opacity-60" />
-    </div>
-  );
-}
+import { SectionWrapper } from "@/components/ui/SectionWrapper";
+import { HUDCorners } from "@/components/ui/HUDCorners";
 
 const contactLinks = [
   {
@@ -52,7 +42,6 @@ const contactLinks = [
   },
 ];
 
-// Communication Terminal Card
 function CommTerminal({
   link,
   index,
@@ -134,139 +123,101 @@ export function ContactSection() {
   const { openModal } = useContactModal();
 
   return (
-    <section
+    <SectionWrapper
       id="contact"
-      className="relative min-h-screen flex flex-col justify-center py-24 px-4 overflow-hidden"
-      style={{ backgroundColor: "#030014" }}
+      cornerData={{
+        topLeft: { line1: "SECTOR: 006", line2: "NODE: COMMS" },
+        topRight: { line1: "SIGNAL: STRONG", line2: "FREQ: OPEN" },
+        bottomLeft: { line1: "UPLINK: READY", line2: "PING: 1ms" },
+        bottomRight: { line1: "CLEARANCE: GRANTED", line2: "ACCESS: FULL" },
+      }}
     >
-      {/* Grid overlay */}
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(34, 211, 209, 0.5) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(34, 211, 209, 0.5) 1px, transparent 1px)
-          `,
-          backgroundSize: "50px 50px",
-        }}
-      />
-
-      <div className="max-w-4xl mx-auto w-full relative z-10">
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-          className="text-center mb-12"
-        >
-          <div className="inline-block relative">
-            <div className="absolute -inset-1 bg-gradient-to-r from-nebula-purple/30 to-aurora-cyan/30 blur" />
-            <div className="relative px-6 py-3 bg-black/60 backdrop-blur-sm border border-aurora-cyan/30">
-              <HUDCorners />
-              <h2 className="text-2xl md:text-3xl font-bold tracking-wider text-aurora-cyan font-mono">
-                <span className="text-nebula-purple mr-2">&gt;</span>
-                COMMS_LINK.exe
-                <span className="animate-pulse ml-1">_</span>
-              </h2>
-            </div>
-          </div>
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="mt-4 text-sm font-mono text-text-muted tracking-wider"
-          >
-            ESTABLISH CONNECTION // INITIATE TRANSMISSION
-          </motion.p>
-        </motion.div>
-
-        {/* Contact Terminals */}
-        <div className="grid sm:grid-cols-3 gap-6 mb-12">
-          {contactLinks.map((link, index) => (
-            <CommTerminal
-              key={link.label}
-              link={link}
-              index={index}
-              onEmailClick={openModal}
-            />
-          ))}
-        </div>
-
-        {/* CTA Button */}
+      {/* Centered terminal window */}
+      <div className="flex-1 flex items-center justify-center px-8 py-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
+          transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="relative w-full max-w-4xl bg-black/70 backdrop-blur-sm border border-aurora-cyan/30 rounded-lg overflow-hidden"
         >
-          <button
-            onClick={openModal}
-            className="group inline-flex items-center gap-3 px-8 py-4 bg-black/60 backdrop-blur-sm border border-aurora-cyan/50 font-mono font-bold text-aurora-cyan tracking-wider transition-all duration-300 hover:bg-aurora-cyan/10 hover:border-aurora-cyan hover:shadow-lg hover:shadow-aurora-cyan/20 relative"
-          >
-            <HUDCorners />
-            <span className="text-nebula-purple">&gt;</span>
-            <span>TRANSMIT_MESSAGE</span>
-            <svg
-              className="w-5 h-5 group-hover:translate-x-1 transition-transform"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
-          </button>
-        </motion.div>
+          <HUDCorners />
 
-        {/* Footer */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center border-t border-aurora-cyan/20 pt-8"
-        >
-          <div className="flex items-center justify-center gap-2 text-xs font-mono text-text-muted mb-2">
-            <span className="text-aurora-cyan/50">[</span>
-            <span>BUILT_WITH:</span>
-            <span className="text-aurora-cyan">Next.js</span>
-            <span className="text-text-muted/50">//</span>
-            <span className="text-aurora-cyan">Tailwind</span>
-            <span className="text-text-muted/50">//</span>
-            <span className="text-aurora-cyan">Framer</span>
-            <span className="text-aurora-cyan/50">]</span>
+          {/* Terminal header bar */}
+          <div className="flex items-center justify-between border-b border-aurora-cyan/30 px-4 py-3 bg-black/40">
+            <div className="flex items-center gap-3">
+              <div className="flex gap-1.5">
+                <div className="w-2.5 h-2.5 rounded-full bg-hud-red/80" />
+                <div className="w-2.5 h-2.5 rounded-full bg-hud-amber/80" />
+                <div className="w-2.5 h-2.5 rounded-full bg-hud-green/80" />
+              </div>
+              <span className="font-mono text-sm text-aurora-cyan">
+                <span className="text-nebula-purple">&gt;</span> COMMS_LINK.exe
+                <motion.span
+                  animate={{ opacity: [1, 0] }}
+                  transition={{ duration: 0.5, repeat: Infinity }}
+                >
+                  _
+                </motion.span>
+              </span>
+            </div>
+            <span className="text-[10px] font-mono text-text-muted/50">channels: {contactLinks.length}</span>
           </div>
-          <p className="text-[10px] font-mono text-text-muted/50">
-            &copy; {new Date().getFullYear()} {personal.name.toUpperCase()} // ALL_RIGHTS_RESERVED
-          </p>
+
+          {/* Terminal content */}
+          <div className="p-6">
+            {/* Contact Terminals */}
+            <div className="grid sm:grid-cols-3 gap-4 mb-6">
+              {contactLinks.map((link, index) => (
+                <CommTerminal
+                  key={link.label}
+                  link={link}
+                  index={index}
+                  onEmailClick={openModal}
+                />
+              ))}
+            </div>
+
+            {/* Divider */}
+            <div className="h-px bg-aurora-cyan/20 mb-6" />
+
+            {/* CTA Button */}
+            <div className="text-center">
+              <button
+                onClick={openModal}
+                className="group inline-flex items-center gap-3 px-8 py-4 bg-black/60 backdrop-blur-sm border border-aurora-cyan/50 font-mono font-bold text-aurora-cyan tracking-wider transition-all duration-300 hover:bg-aurora-cyan/10 hover:border-aurora-cyan hover:shadow-lg hover:shadow-aurora-cyan/20 relative"
+              >
+                <HUDCorners />
+                <span className="text-nebula-purple">&gt;</span>
+                <span>TRANSMIT_MESSAGE</span>
+                <svg
+                  className="w-5 h-5 group-hover:translate-x-1 transition-transform"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          {/* Terminal footer */}
+          <div className="border-t border-aurora-cyan/20 px-4 py-2 bg-black/40">
+            <div className="flex items-center justify-between text-[10px] font-mono text-text-muted/40">
+              <div className="flex items-center gap-2">
+                <span>BUILT_WITH:</span>
+                <span className="text-aurora-cyan/60">Next.js</span>
+                <span>//</span>
+                <span className="text-aurora-cyan/60">Tailwind</span>
+                <span>//</span>
+                <span className="text-aurora-cyan/60">Framer</span>
+              </div>
+              <span>&copy; {new Date().getFullYear()} {personal.name.toUpperCase()}</span>
+            </div>
+          </div>
         </motion.div>
       </div>
-
-      {/* Corner decorations - Desktop only */}
-      <div className="absolute top-8 left-8 text-xs font-mono text-text-muted/50 hidden md:block">
-        <div className="flex items-center gap-2 mb-1">
-          <div className="w-2 h-2 bg-hud-green rounded-full" />
-          <span>SECTOR: 005</span>
-        </div>
-        <div className="text-aurora-cyan/50">NODE: COMMS</div>
-      </div>
-
-      <div className="absolute top-8 right-8 text-xs font-mono text-right text-text-muted/50 hidden md:block">
-        <div className="text-aurora-cyan/50">SIGNAL: STRONG</div>
-        <div>FREQ: OPEN</div>
-      </div>
-
-      <div className="absolute bottom-8 left-8 text-xs font-mono text-text-muted/30 hidden md:block">
-        <div>UPLINK: READY</div>
-        <div>PING: 1ms</div>
-      </div>
-
-      <div className="absolute bottom-8 right-8 text-xs font-mono text-text-muted/30 hidden md:block">
-        <div className="text-right">CLEARANCE: GRANTED</div>
-        <div className="text-right">ACCESS: FULL</div>
-      </div>
-    </section>
+    </SectionWrapper>
   );
 }
