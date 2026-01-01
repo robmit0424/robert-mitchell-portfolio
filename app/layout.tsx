@@ -3,9 +3,7 @@ import { Orbitron, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { LoadingProvider } from "@/contexts/LoadingContext";
 import { ContactModalProvider } from "@/contexts/ContactModalContext";
-import { CustomCursor } from "@/components/effects/CustomCursor";
 import { SpaceDust } from "@/components/effects/SpaceDust";
-import { LoadingScreen } from "@/components/LoadingScreen";
 import { GlobalContactModal } from "@/components/ui/GlobalContactModal";
 
 const orbitron = Orbitron({
@@ -50,8 +48,6 @@ export default function RootLayout({
       >
         <LoadingProvider>
           <ContactModalProvider>
-            <LoadingScreen />
-            <CustomCursor />
             <SpaceDust />
             {children}
             <GlobalContactModal />
