@@ -28,6 +28,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [transmissionState, setTransmissionState] = useState<TransmissionState>("idle");
+  const [errorMessage, setErrorMessage] = useState("");
   const [typedHeader, setTypedHeader] = useState("");
   const fullHeader = "OUTGOING_TRANSMISSION";
 
@@ -56,6 +57,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
         setEmail("");
         setMessage("");
         setTransmissionState("idle");
+        setErrorMessage("");
       }, 300);
     }
   }, [isOpen]);
@@ -74,21 +76,36 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setTransmissionState("transmitting");
+    setErrorMessage("");
 
-    // Simulate transmission delay
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      const response = await fetch("/api/send-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, message }),
+      });
 
-    // Create mailto link and open it
-    const subject = encodeURIComponent(`Message from ${name}`);
-    const body = encodeURIComponent(`From: ${name}\nEmail: ${email}\n\n${message}`);
-    window.location.href = `mailto:${personal.email}?subject=${subject}&body=${body}`;
+      const data = await response.json();
 
-    setTransmissionState("success");
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to send message");
+      }
 
-    // Close after success animation
-    setTimeout(() => {
-      onClose();
-    }, 2000);
+      setTransmissionState("success");
+
+      // Close after success animation
+      setTimeout(() => {
+        onClose();
+      }, 2500);
+    } catch (error) {
+      console.error("Transmission error:", error);
+      setTransmissionState("error");
+      setErrorMessage(
+        error instanceof Error ? error.message : "Transmission failed. Please try again."
+      );
+    }
   };
 
   return (
@@ -182,8 +199,40 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                         TRANSMISSION_COMPLETE
                       </h4>
                       <p className="text-sm font-mono text-text-muted">
-                        Message queued for delivery
+                        Message delivered successfully
                       </p>
+                    </motion.div>
+                  ) : transmissionState === "error" ? (
+                    <motion.div
+                      key="error"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="text-center py-12"
+                    >
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: "spring", damping: 10, stiffness: 200, delay: 0.2 }}
+                        className="w-20 h-20 mx-auto mb-6 rounded-full border-2 border-hud-red flex items-center justify-center"
+                        style={{ boxShadow: "0 0 30px rgba(248, 113, 113, 0.5)" }}
+                      >
+                        <svg className="w-10 h-10 text-hud-red" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </motion.div>
+                      <h4 className="text-xl font-mono font-bold text-hud-red tracking-wider mb-2">
+                        TRANSMISSION_FAILED
+                      </h4>
+                      <p className="text-sm font-mono text-text-muted mb-4">
+                        {errorMessage}
+                      </p>
+                      <button
+                        onClick={() => setTransmissionState("idle")}
+                        className="px-6 py-2 border border-aurora-cyan/50 text-aurora-cyan font-mono text-sm hover:bg-aurora-cyan/10 transition-colors"
+                      >
+                        RETRY_TRANSMISSION
+                      </button>
                     </motion.div>
                   ) : transmissionState === "transmitting" ? (
                     <motion.div
