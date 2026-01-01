@@ -1,26 +1,319 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Deep Space - Base colors */
+  --background: #030014;
+  --foreground: #f8fafc;
+
+  /* Nebula Palette */
+  --nebula-purple: #7c3aed;
+  --nebula-purple-glow: rgba(124, 58, 237, 0.4);
+  --cosmic-blue: #2563eb;
+  --cosmic-blue-glow: rgba(37, 99, 235, 0.4);
+  --stellar-pink: #ec4899;
+  --stellar-pink-glow: rgba(236, 72, 153, 0.4);
+  --nova-orange: #f97316;
+  --aurora-cyan: #22d3d1;
+  --aurora-cyan-glow: rgba(34, 211, 209, 0.4);
+
+  /* Primary accent (nebula purple) */
+  --accent: #7c3aed;
+  --accent-hover: #8b5cf6;
+  --accent-glow: rgba(124, 58, 237, 0.5);
+
+  /* UI colors */
+  --card-bg: rgba(15, 10, 40, 0.8);
+  --card-border: rgba(124, 58, 237, 0.2);
+  --text-muted: #94a3b8;
+  --text-secondary: #cbd5e1;
+
+  /* HUD/Terminal colors */
+  --hud-green: #4ade80;
+  --hud-amber: #fbbf24;
+  --hud-red: #f87171;
 }
 
 @theme inline {
+  /* Base colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-card-bg: var(--card-bg);
+  --color-card-border: var(--card-border);
+  --color-text-muted: var(--text-muted);
+  --color-text-secondary: var(--text-secondary);
+
+  /* Nebula colors */
+  --color-nebula-purple: var(--nebula-purple);
+  --color-cosmic-blue: var(--cosmic-blue);
+  --color-stellar-pink: var(--stellar-pink);
+  --color-nova-orange: var(--nova-orange);
+  --color-aurora-cyan: var(--aurora-cyan);
+
+  /* HUD colors */
+  --color-hud-green: var(--hud-green);
+  --color-hud-amber: var(--hud-amber);
+  --color-hud-red: var(--hud-red);
+
+  /* Fonts */
+  --font-sans: var(--font-space-grotesk);
+  --font-mono: var(--font-jetbrains);
+  --font-display: var(--font-orbitron);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Orbitron for all headings - futuristic space font */
+h1, h2, h3, h4, h5, h6,
+.font-display {
+  font-family: var(--font-orbitron), system-ui, sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Glitch text effect */
+@keyframes glitch {
+  0%, 100% {
+    text-shadow:
+      2px 0 var(--stellar-pink),
+      -2px 0 var(--cosmic-blue);
+  }
+  25% {
+    text-shadow:
+      -2px 0 var(--stellar-pink),
+      2px 0 var(--cosmic-blue);
+  }
+  50% {
+    text-shadow:
+      2px 2px var(--stellar-pink),
+      -2px -2px var(--cosmic-blue);
+  }
+  75% {
+    text-shadow:
+      -2px 2px var(--stellar-pink),
+      2px -2px var(--cosmic-blue);
+  }
+}
+
+.glitch-text {
+  animation: glitch 0.3s ease-in-out infinite;
+}
+
+.glitch-text:hover {
+  animation: glitch 0.1s ease-in-out infinite;
+}
+
+/* Scanline overlay effect */
+.scanlines::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.1) 2px,
+    rgba(0, 0, 0, 0.1) 4px
+  );
+  pointer-events: none;
+}
+
+/* Hologram flicker */
+@keyframes hologram-flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.8; }
+  94% { opacity: 1; }
+  97% { opacity: 0.9; }
+  98% { opacity: 1; }
+}
+
+.hologram {
+  animation: hologram-flicker 4s ease-in-out infinite;
+}
+
+/* HUD border styling */
+.hud-border {
+  border: 1px solid var(--aurora-cyan);
+  box-shadow:
+    inset 0 0 20px rgba(34, 211, 209, 0.1),
+    0 0 20px rgba(34, 211, 209, 0.2);
+}
+
+/* Nebula gradient backgrounds */
+.bg-nebula {
+  background: radial-gradient(ellipse at top, var(--nebula-purple) 0%, transparent 50%),
+              radial-gradient(ellipse at bottom right, var(--cosmic-blue) 0%, transparent 50%),
+              radial-gradient(ellipse at bottom left, var(--stellar-pink) 0%, transparent 50%),
+              var(--background);
+}
+
+/* Pulse animation for status indicators */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
+  }
+  50% {
+    box-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Hide default cursor on desktop (custom cursor replaces it) */
+@media (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
+}
+
+/* Selection styling */
+::selection {
+  background: var(--accent);
+  color: var(--background);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--card-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Animation utilities */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+/* Glow effect for accent elements */
+.glow {
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.glow-text {
+  text-shadow: 0 0 20px var(--accent-glow);
+}
+
+/* Scroll indicator animation */
+@keyframes scroll-line {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(200%);
+    opacity: 0;
+  }
+}
+
+.animate-scroll-line {
+  animation: scroll-line 1.5s ease-in-out infinite;
+}
+
+/* Floating animation for skill icons */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Stagger the float animation for visual variety */
+.skill-card:nth-child(2n) .animate-float {
+  animation-delay: 0.5s;
+}
+
+.skill-card:nth-child(3n) .animate-float {
+  animation-delay: 1s;
+}
+
+.skill-card:nth-child(5n) .animate-float {
+  animation-delay: 1.5s;
+}
+
+/* Glassmorphism card */
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Skill icon glow on hover */
+.group:hover .skill-icon-img {
+  filter: brightness(1) drop-shadow(0 0 15px var(--glow-color, #646cff));
+}
+
+/* Spotlight animation for Aceternity UI */
+@keyframes spotlight {
+  0% {
+    opacity: 0;
+    transform: translate(-72%, -62%) scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -40%) scale(1);
+  }
+}
+
+.animate-spotlight {
+  animation: spotlight 2s ease 0.75s 1 forwards;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
 }
