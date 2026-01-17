@@ -10,6 +10,8 @@ interface WindowProps {
   children: React.ReactNode;
   zIndex: number;
   isMaximized?: boolean;
+  initialWidth?: number;
+  initialHeight?: number;
   onClose: () => void;
   onFocus: () => void;
   onMinimize: () => void;
@@ -28,6 +30,8 @@ export function Window({
   children,
   zIndex,
   isMaximized = false,
+  initialWidth = DEFAULT_WIDTH,
+  initialHeight = DEFAULT_HEIGHT,
   onClose,
   onFocus,
   onMinimize,
@@ -37,7 +41,7 @@ export function Window({
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
   const [position, setPosition] = useState({ x: -1, y: -1 });
-  const [size, setSize] = useState({ width: DEFAULT_WIDTH, height: DEFAULT_HEIGHT });
+  const [size, setSize] = useState({ width: initialWidth, height: initialHeight });
   const [resizeDirection, setResizeDirection] = useState<string | null>(null);
 
   const dragStart = useRef({ x: 0, y: 0, posX: 0, posY: 0 });

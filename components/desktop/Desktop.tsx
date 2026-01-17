@@ -18,10 +18,10 @@ import { SkillsContent } from "./window-content/SkillsContent";
 import { ContactContent } from "./window-content/ContactContent";
 
 const desktopApps = [
-  { id: "about", label: "About Me", windowTitle: "CREW_MANIFEST", icon: "/icons/about.png", component: AboutContent, initialPos: { x: 24, y: 60 } },
+  { id: "about", label: "About Me", windowTitle: "CREW_MANIFEST", icon: "/icons/about.png", component: AboutContent, initialPos: { x: 24, y: 60 }, initialSize: { width: 800, height: 580 } },
   { id: "experience", label: "Experience", windowTitle: "MISSION_HISTORY", icon: "/icons/experience.png", component: ExperienceContent, initialPos: { x: 24, y: 170 } },
   { id: "skills", label: "Skills", windowTitle: "ARMORY", icon: "/icons/skills.png", component: SkillsContent, initialPos: { x: 24, y: 280 } },
-  { id: "contact", label: "Contact", windowTitle: "COMMS_LINK", icon: "/icons/contact.png", component: ContactContent, initialPos: { x: 24, y: 390 } },
+  { id: "contact", label: "Contact", windowTitle: "COMMS_LINK", icon: "/icons/contact.png", component: ContactContent, initialPos: { x: 24, y: 390 }, initialSize: { width: 700, height: 420 } },
 ];
 
 export function Desktop() {
@@ -153,6 +153,8 @@ export function Desktop() {
                 title={`${app.windowTitle}.exe`}
                 zIndex={window.zIndex}
                 isMaximized={window.maximized}
+                initialWidth={app.initialSize?.width}
+                initialHeight={app.initialSize?.height}
                 onClose={() => closeWindow(window.id)}
                 onFocus={() => focusWindow(window.id)}
                 onMinimize={() => minimizeWindow(window.id)}
